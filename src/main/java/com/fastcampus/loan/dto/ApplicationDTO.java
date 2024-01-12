@@ -11,12 +11,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public class ApplicationDTO implements Serializable {
+
   @NoArgsConstructor
   @AllArgsConstructor
   @Getter
   @Setter
   @Builder
   public static class Request {
+
     private String name;
 
     private String cellPhone;
@@ -26,6 +28,7 @@ public class ApplicationDTO implements Serializable {
     private BigDecimal hopeAmount;
 
   }
+
   @NoArgsConstructor
   @AllArgsConstructor
   @Getter
@@ -55,6 +58,23 @@ public class ApplicationDTO implements Serializable {
   @Getter
   @Builder
   public static class AcceptedTermsAndCondition {
-    private List<Long>  acceptTermsIds;
+
+    private List<Long> acceptTermsIds;
+  }
+
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Getter
+  @Setter
+  @Builder
+  public static class GrantAmount {
+
+    private Long applicationId;
+
+    private BigDecimal approvalAmount;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
   }
 }

@@ -49,10 +49,13 @@ public class Application extends BaseEntity {
   @Column(columnDefinition = "datetime DEFAULT NULL COMMENT '만기일'")
   private LocalDateTime maturity;
 
-  @Column(columnDefinition = "decimal(15, 2)DEFAULT NULL COMMENT '대출 신청 금액'")
+  @Column(columnDefinition = "decimal(15, 2) DEFAULT NULL COMMENT '대출 신청 금액'")
   private BigDecimal hopeAmount;
 
   @Column(columnDefinition = "datetime DEFAULT NULL COMMENT '신청일자'")
   private LocalDateTime appliedAt;
+
+  @Column(columnDefinition = "decimal(15, 2) DEFAULT NULL COMMENT '승인 금액'")
+  private BigDecimal approvalAmount;
 
 }
