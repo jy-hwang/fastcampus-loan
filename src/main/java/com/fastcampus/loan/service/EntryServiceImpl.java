@@ -80,7 +80,6 @@ public class EntryServiceImpl implements EntryService {
             .build());
 
     //reponse
-
     return UpdateResponse.builder()
         .entryId(entryId)
         .applicationId(applicationId)
@@ -112,7 +111,6 @@ public class EntryServiceImpl implements EntryService {
     entryRepository.save(entry);
 
     BigDecimal beforeEntryAmount = entry.getEntryAmount();
-
 
     Long applicationId = entry.getApplicationId();
     balanceService.update(applicationId,
