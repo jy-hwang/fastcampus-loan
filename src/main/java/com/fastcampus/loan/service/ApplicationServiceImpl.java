@@ -3,7 +3,6 @@ package com.fastcampus.loan.service;
 import com.fastcampus.loan.domain.AcceptTerms;
 import com.fastcampus.loan.domain.Application;
 import com.fastcampus.loan.domain.Terms;
-
 import com.fastcampus.loan.dto.ApplicationDTO.AcceptedTermsAndCondition;
 import com.fastcampus.loan.dto.ApplicationDTO.Request;
 import com.fastcampus.loan.dto.ApplicationDTO.Response;
@@ -11,7 +10,9 @@ import com.fastcampus.loan.exception.BaseException;
 import com.fastcampus.loan.exception.ResultType;
 import com.fastcampus.loan.repository.AcceptTermsRepository;
 import com.fastcampus.loan.repository.ApplicationRepository;
+import com.fastcampus.loan.repository.JudgementRepository;
 import com.fastcampus.loan.repository.TermsRepository;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +31,7 @@ public class ApplicationServiceImpl implements ApplicationService {
   private final TermsRepository termsRepository;
   private final AcceptTermsRepository acceptTermsRepository;
   private final ModelMapper modelMapper;
+  private final JudgementRepository judgementRepository;
 
   @Override
   public Response create(Request request) {
@@ -103,7 +105,7 @@ public class ApplicationServiceImpl implements ApplicationService {
       throw new BaseException(ResultType.SYSTEM_ERROR);
     }
 
-    for(Long termsId : acceptTermsIds){
+    for (Long termsId : acceptTermsIds) {
       AcceptTerms accepted = AcceptTerms.builder()
           .termsId(termsId)
           .applicationId(applicationId)
@@ -113,5 +115,28 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     return true;
+  }
+
+  @Override
+  public Response contract(Long applicationId) {
+    // 신청 정보 있는지
+    Application application = applicationRepository.findById(applicationId).orElseThrow(() -> {
+      throw new BaseException(ResultType.SYSTEM_ERROR);
+    });
+
+    // 심사 정보 있는지
+    judgementRepository.findByApplicationId(applicationId).orElseThrow(() -> {
+      throw new BaseException(ResultType.SYSTEM_ERROR);
+    });
+
+    // 승인 금액 > 0
+    if (application.getApprovalAmount() == null || application.getApprovalAmount().compareTo(BigDecimal.ZERO) == 0) {
+      throw new BaseException(ResultType.SYSTEM_ERROR);
+    }
+
+    // 계약 체결
+    application.setContractedAt(LocalDateTime.now());
+    applicationRepository.save(application);
+    return null;
   }
 }
