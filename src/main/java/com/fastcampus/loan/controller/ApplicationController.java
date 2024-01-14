@@ -48,14 +48,11 @@ public class ApplicationController extends AbstractController {
   @PutMapping("/{applicationId}")
   public ResponseDTO<Response> update(@PathVariable Long applicationId, @RequestBody Request request) {
     return ok(applicationService.update(applicationId, request));
-
   }
-
 
   @DeleteMapping("/{applicationId}")
   public ResponseDTO<Void> delete(@PathVariable Long applicationId) {
     applicationService.delete(applicationId);
-
     return ok();
   }
 
@@ -100,5 +97,10 @@ public class ApplicationController extends AbstractController {
     return ok();
   }
 
+  @PutMapping("/{applicationId}/contract")
+  public ResponseDTO<Response> contract(@PathVariable Long applicationId) {
+    return ok(applicationService.contract(applicationId));
+
+  }
 
 }
