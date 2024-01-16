@@ -1,26 +1,23 @@
 package com.fastcampus.loan.dto;
 
+import lombok.*;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 public class BalanceDTO implements Serializable {
-  @NoArgsConstructor
-  @AllArgsConstructor
-  @Getter
-  @Setter
-  @Builder
-  public static class Request {
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    @Builder
+    public static class CreateRequest {
 
-    private Long applicationId;
+        private Long applicationId;
 
-    private BigDecimal entryAmount;
+        private BigDecimal entryAmount;
 
-  }
+    }
 
 
     @NoArgsConstructor
@@ -30,25 +27,40 @@ public class BalanceDTO implements Serializable {
     @Builder
     public static class UpdateRequest {
 
-      private Long applicationId;
+        private Long applicationId;
 
-      private BigDecimal beforeEntryAmount;
+        private BigDecimal beforeEntryAmount;
 
-      private BigDecimal afterEntryAmount;
+        private BigDecimal afterEntryAmount;
 
     }
 
-  @NoArgsConstructor
-  @AllArgsConstructor
-  @Getter
-  @Setter
-  @Builder
-  public static class Response {
-    private Long balanceId;
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    @Builder
+    public static class RepaymentRequest {
+        private RepaymentType type;
+        private BigDecimal repaymentAmount;
 
-    private Long applicationId;
+        public enum RepaymentType {
+            ADD, REMOVE
+        }
 
-    private BigDecimal entryAmount;
-  }
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    @Builder
+    public static class Response {
+        private Long balanceId;
+
+        private Long applicationId;
+
+        private BigDecimal balance;
+    }
 
 }
