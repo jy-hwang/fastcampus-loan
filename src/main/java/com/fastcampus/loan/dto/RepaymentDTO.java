@@ -5,72 +5,67 @@ import lombok.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
-public class ApplicationDTO implements Serializable {
-
+public class RepaymentDTO implements Serializable {
     @NoArgsConstructor
     @AllArgsConstructor
+    @Builder
     @Getter
     @Setter
-    @Builder
     public static class Request {
 
-        private String name;
-
-        private String cellPhone;
-
-        private String email;
-
-        private BigDecimal hopeAmount;
+        private BigDecimal repaymentAmount;
 
     }
 
     @NoArgsConstructor
     @AllArgsConstructor
+    @Builder
     @Getter
     @Setter
-    @Builder
     public static class Response {
 
         private Long applicationId;
 
-        private String name;
+        private BigDecimal repaymentAmount;
 
-        private String cellPhone;
+        private BigDecimal balance;
 
-        private String email;
+        private LocalDateTime createdAt;
 
-        private BigDecimal hopeAmount;
+        private LocalDateTime updatedAt;
+    }
 
-        private LocalDateTime appliedAt;
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    @Getter
+    @Setter
+    public static class UpdateResponse {
+        private Long applicationId;
+
+        private BigDecimal beforeRepaymentAmount;
+
+        private BigDecimal afterRepaymentAmount;
+
+        private BigDecimal balance;
 
         private LocalDateTime createdAt;
 
         private LocalDateTime updatedAt;
 
-        private LocalDateTime contractedAt;
     }
 
     @NoArgsConstructor
     @AllArgsConstructor
-    @Getter
     @Builder
-    public static class AcceptedTermsAndCondition {
-
-        private List<Long> acceptTermsIds;
-    }
-
-    @NoArgsConstructor
-    @AllArgsConstructor
     @Getter
     @Setter
-    @Builder
-    public static class GrantAmount {
+    public static class ListResponse {
 
         private Long applicationId;
 
-        private BigDecimal approvalAmount;
+        private BigDecimal repaymentAmount;
 
         private LocalDateTime createdAt;
 

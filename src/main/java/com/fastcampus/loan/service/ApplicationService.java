@@ -6,15 +6,15 @@ import com.fastcampus.loan.dto.ApplicationDTO.Response;
 
 public interface ApplicationService {
 
-  Response create(Request request);
+    Response create(Request request);
 
-  Response get(Long applicationId);
+    Response get(Long applicationId);
 
-  Response update(Long applicationId, Request request);
+    Response update(Long applicationId, Request request);
 
-  void delete(Long applicationId);
+    void delete(Long applicationId);
 
-  boolean acceptTerms(Long applicationId, AcceptedTermsAndCondition request);
+    boolean acceptTerms(Long applicationId, AcceptedTermsAndCondition request);
 
-  Response contract(Long applicationId);
+    Response contract(Long applicationId);
 }

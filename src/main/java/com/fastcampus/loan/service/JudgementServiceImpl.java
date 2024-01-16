@@ -9,104 +9,105 @@ import com.fastcampus.loan.exception.BaseException;
 import com.fastcampus.loan.exception.ResultType;
 import com.fastcampus.loan.repository.ApplicationRepository;
 import com.fastcampus.loan.repository.JudgementRepository;
-import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
 public class JudgementServiceImpl implements JudgementService {
 
 
-  private final ApplicationRepository applicationRepository;
+    private final ApplicationRepository applicationRepository;
 
-  private final JudgementRepository judgementRepository;
+    private final JudgementRepository judgementRepository;
 
-  private final ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-  @Override
-  public Response create(Request request) {
+    @Override
+    public Response create(Request request) {
 
-    //신청 정보 검증
-    Long applicationId = request.getApplicationId();
-    if (!isPresentApplication(applicationId)) {
-      throw new BaseException(ResultType.SYSTEM_ERROR);
+        //신청 정보 검증
+        Long applicationId = request.getApplicationId();
+        if (!isPresentApplication(applicationId)) {
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        }
+
+        // request dto -> entity -> save
+        Judgement judgement = modelMapper.map(request, Judgement.class);
+        Judgement saved = judgementRepository.save(judgement);
+
+        // save -> response dto
+
+        return modelMapper.map(saved, Response.class);
     }
 
-    // request dto -> entity -> save
-    Judgement judgement = modelMapper.map(request, Judgement.class);
-    Judgement saved = judgementRepository.save(judgement);
-
-    // save -> response dto
-
-    return modelMapper.map(saved, Response.class);
-  }
-
-  @Override
-  public Response get(Long judgementId) {
-    Judgement judgement = judgementRepository.findById(judgementId).orElseThrow(() -> {
-      throw new BaseException(ResultType.SYSTEM_ERROR);
-    });
-    return modelMapper.map(judgement, Response.class);
-  }
-
-  @Override
-  public Response getJudgementOfApplication(Long applicationId) {
-    if (!isPresentApplication(applicationId)) {
-      throw new BaseException(ResultType.SYSTEM_ERROR);
+    @Override
+    public Response get(Long judgementId) {
+        Judgement judgement = judgementRepository.findById(judgementId).orElseThrow(() -> {
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        });
+        return modelMapper.map(judgement, Response.class);
     }
-    Judgement judgement = judgementRepository.findByApplicationId(applicationId).orElseThrow(() -> {
-      throw new BaseException(ResultType.SYSTEM_ERROR);
-    });
-    return modelMapper.map(judgement, Response.class);
-  }
 
-  @Override
-  public Response update(Long judgementId, Request request) {
+    @Override
+    public Response getJudgementOfApplication(Long applicationId) {
+        if (!isPresentApplication(applicationId)) {
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        }
+        Judgement judgement = judgementRepository.findByApplicationId(applicationId).orElseThrow(() -> {
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        });
+        return modelMapper.map(judgement, Response.class);
+    }
 
-    Judgement judgement = judgementRepository.findById(judgementId).orElseThrow(() -> {
-      throw new BaseException(ResultType.SYSTEM_ERROR);
-    });
-    judgement.setName(request.getName());
-    judgement.setApprovalAmount(request.getApprovalAmount());
-    judgementRepository.save(judgement);
+    @Override
+    public Response update(Long judgementId, Request request) {
 
-    return modelMapper.map(judgement, Response.class);
-  }
+        Judgement judgement = judgementRepository.findById(judgementId).orElseThrow(() -> {
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        });
+        judgement.setName(request.getName());
+        judgement.setApprovalAmount(request.getApprovalAmount());
+        judgementRepository.save(judgement);
 
-  @Override
-  public void delete(Long judgementId) {
-    Judgement judgement = judgementRepository.findById(judgementId).orElseThrow(() -> {
-      throw new BaseException(ResultType.SYSTEM_ERROR);
-    });
+        return modelMapper.map(judgement, Response.class);
+    }
 
-    judgement.setIsDeleted(true);
+    @Override
+    public void delete(Long judgementId) {
+        Judgement judgement = judgementRepository.findById(judgementId).orElseThrow(() -> {
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        });
 
-    judgementRepository.save(judgement);
+        judgement.setIsDeleted(true);
 
-  }
+        judgementRepository.save(judgement);
 
-  @Override
-  public GrantAmount grant(Long judgementId) {
-    Judgement judgement = judgementRepository.findById(judgementId).orElseThrow(() -> {
-      throw new BaseException(ResultType.SYSTEM_ERROR);
-    });
+    }
 
-    Long applicationId = judgement.getApplicationId();
+    @Override
+    public GrantAmount grant(Long judgementId) {
+        Judgement judgement = judgementRepository.findById(judgementId).orElseThrow(() -> {
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        });
 
-    Application application = applicationRepository.findById(applicationId).orElseThrow(() -> {
-      throw new BaseException(ResultType.SYSTEM_ERROR);
-    });
-    BigDecimal approvalAmount = judgement.getApprovalAmount();
-    application.setApprovalAmount(approvalAmount);
+        Long applicationId = judgement.getApplicationId();
 
-    applicationRepository.save(application);
-    return modelMapper.map(application, GrantAmount.class);
-  }
+        Application application = applicationRepository.findById(applicationId).orElseThrow(() -> {
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        });
+        BigDecimal approvalAmount = judgement.getApprovalAmount();
+        application.setApprovalAmount(approvalAmount);
 
-  private boolean isPresentApplication(Long applicationId) {
-    return applicationRepository.findById(applicationId).isPresent();
-  }
+        applicationRepository.save(application);
+        return modelMapper.map(application, GrantAmount.class);
+    }
+
+    private boolean isPresentApplication(Long applicationId) {
+        return applicationRepository.findById(applicationId).isPresent();
+    }
 
 }

@@ -1,18 +1,11 @@
 package com.fastcampus.loan.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Where;
+
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -23,16 +16,16 @@ import org.hibernate.annotations.Where;
 @DynamicInsert
 @DynamicUpdate
 @Where(clause = "is_deleted=false")
-public class AcceptTerms extends  BaseEntity{
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(nullable = false, updatable = false)
-  private long acceptTermsId;
+public class AcceptTerms extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, updatable = false)
+    private long acceptTermsId;
 
-  @Column(columnDefinition = "bigint NOT NULL COMMENT '신청 ID'")
-  private Long applicationId;
+    @Column(columnDefinition = "bigint NOT NULL COMMENT '신청 ID'")
+    private Long applicationId;
 
-  @Column(columnDefinition = "bigint NOT NULL COMMENT '약관 ID'")
-  private Long termsId;
+    @Column(columnDefinition = "bigint NOT NULL COMMENT '약관 ID'")
+    private Long termsId;
 
 }
