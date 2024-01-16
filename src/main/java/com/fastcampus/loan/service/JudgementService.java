@@ -6,16 +6,16 @@ import com.fastcampus.loan.dto.JudgementDTO.Response;
 
 public interface JudgementService {
 
-  Response create(Request request);
+    Response create(Request request);
 
-  Response get(Long judgementId);
+    Response get(Long judgementId);
 
-  Response getJudgementOfApplication(Long applicationId);
+    Response getJudgementOfApplication(Long applicationId);
 
-  Response update(Long judgementId, Request request);
+    Response update(Long judgementId, Request request);
 
-  void delete(Long judgementId);
+    void delete(Long judgementId);
 
-  GrantAmount grant(Long judgementId);
+    GrantAmount grant(Long judgementId);
 
 }
